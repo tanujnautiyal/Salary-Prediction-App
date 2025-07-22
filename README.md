@@ -8,7 +8,7 @@ This is a Streamlit web application that predicts whether a person earns more th
 
 ## 🚀 Demo
 
-👉 [Live App on Streamlit](https://your-custom-url.streamlit.app)
+👉 [Live App on Streamlit](https://salary-prediction-app-ml.streamlit.app/)
 
 ---
 
