@@ -69,7 +69,6 @@ def user_input():
         'hours-per-week': [hours_per_week],
     })
 
-
 df_input = user_input()
 
 # --- Apply label encoding only on known categorical columns ---
@@ -87,29 +86,15 @@ for col, val in defaults.items():
         df_input[col] = val
 
 # --- Ensure all scaled columns exist ---
-# Load trained scaler and column list
 scaler = joblib.load('scaler.pkl')
 scaled_columns = joblib.load('scaled_columns.pkl')
 
-import pandas as pd
-
-# Load scaler and the feature list
-scaler = joblib.load('scaler.pkl')
-scaled_columns = joblib.load('scaled_columns.pkl')
-
-# Ensure missing columns are filled (e.g., if user left any blank)
 for col in scaled_columns:
     if col not in df_input.columns:
         df_input[col] = 0  # or mean used during training
 
-# Ensure correct order and column names
 to_scale = df_input[scaled_columns].copy()
-
-
-# Now transform safely
 df_input[scaled_columns] = scaler.transform(to_scale)
-
-
 
 # --- Final check: add any remaining required features ---
 for col in feature_columns:
@@ -129,16 +114,7 @@ if st.button("Predict"):
             st.success(f"💰 **Prediction: >50K USD** (Confidence: {prob:.2%})")
         else:
             st.info(f"📉 **Prediction: ≤50K USD** (Confidence: {prob:.2%})")
-import matplotlib.pyplot as plt
 
-if st.checkbox("Show Feature Importances"):
-    importances = model.feature_importances_
-    sorted_idx = np.argsort(importances)[::-1]
-    plt.figure(figsize=(10, 4))
-    plt.barh(np.array(feature_columns)[sorted_idx], importances[sorted_idx])
-    st.pyplot(plt)
-
-
+# --- Show input table ---
 with st.expander("See Encoded Input Data"):
     st.dataframe(df_input)
-
